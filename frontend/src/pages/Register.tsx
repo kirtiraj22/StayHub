@@ -1,6 +1,10 @@
 import { useForm } from "react-hook-form";
+import { useMutation } from "react-query";
 
-type RegisterFormData = {
+// imports all the function as apiClient variable
+import * as apiClient from "../api-client";
+
+export type RegisterFormData = {
 	firstName: string;
 	lastName: string;
 	email: string;
@@ -16,9 +20,21 @@ const Register = () => {
 		formState: { errors },
 	} = useForm<RegisterFormData>();
 
-	const onSubmit = handleSubmit((data) => {
-		console.log(data);
+	// whenever we want to use POST, PUT or DELETE request, we can use useMutation() hook from react-query
+	const mutation = useMutation(apiClient.register, {
+		onSuccess: () => {
+			console.log("registration succesful");
+		},
+		onError: (error: Error) => {
+			console.log(error.message);
+		},
 	});
+
+	const onSubmit = handleSubmit((data) => {
+		// we are passing the RegisterFormData to the mutate function and then mutate function will pass it to our apiClient.register(it will trigger when we submit the form)
+		mutation.mutate(data);
+	});
+
 	return (
 		<form className="flex flex-col gap-5" onSubmit={onSubmit}>
 			<h2 className="text-3xl font-bold">Create an Account</h2>
