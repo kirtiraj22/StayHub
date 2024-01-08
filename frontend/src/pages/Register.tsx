@@ -3,6 +3,7 @@ import { useMutation } from "react-query";
 
 // imports all the function as apiClient variable
 import * as apiClient from "../api-client";
+import { useAppContext } from "../contexts/AppContext";
 
 export type RegisterFormData = {
 	firstName: string;
@@ -13,6 +14,8 @@ export type RegisterFormData = {
 };
 
 const Register = () => {
+	const { showToast } = useAppContext();
+
 	const {
 		register,
 		watch,
@@ -23,10 +26,10 @@ const Register = () => {
 	// whenever we want to use POST, PUT or DELETE request, we can use useMutation() hook from react-query
 	const mutation = useMutation(apiClient.register, {
 		onSuccess: () => {
-			console.log("registration succesful");
+			showToast({ message: "Registration Success!", type: "SUCCESS" });
 		},
 		onError: (error: Error) => {
-			console.log(error.message);
+			showToast({ message: error.message, type: "ERROR" });
 		},
 	});
 
