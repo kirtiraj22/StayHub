@@ -4,7 +4,7 @@ import { useMutation } from "react-query";
 // imports all the function as apiClient variable
 import * as apiClient from "../api-client";
 import { useAppContext } from "../contexts/AppContext";
-
+import { useNavigate } from "react-router-dom";
 export type RegisterFormData = {
 	firstName: string;
 	lastName: string;
@@ -14,8 +14,8 @@ export type RegisterFormData = {
 };
 
 const Register = () => {
+	const navigate = useNavigate();
 	const { showToast } = useAppContext();
-
 	const {
 		register,
 		watch,
@@ -27,6 +27,7 @@ const Register = () => {
 	const mutation = useMutation(apiClient.register, {
 		onSuccess: () => {
 			showToast({ message: "Registration Success!", type: "SUCCESS" });
+			navigate("/");
 		},
 		onError: (error: Error) => {
 			showToast({ message: error.message, type: "ERROR" });

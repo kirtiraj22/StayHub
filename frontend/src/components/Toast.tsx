@@ -7,6 +7,7 @@ type ToastProps = {
 };
 
 const Toast = ({ message, type, onClose }: ToastProps) => {
+	// the toast notification will be displayed for 5 seconds and after 5 seconds, the onClose() function will be called which will set the toast's value(in AppContext.tsx) to undefined and the timer will get back to undefined
 	useEffect(() => {
 		const timer = setTimeout(() => {
 			onClose();
