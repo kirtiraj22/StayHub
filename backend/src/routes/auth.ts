@@ -69,4 +69,12 @@ router.get("/validate-token", verifyToken, (req: Request, res: Response) => {
 	res.status(200).send({ userId: req.userId });
 });
 
+// making a route to logout(it will simply remove the cookie(i.e make it empty))
+router.post("/logout", (req: Request, res: Response) => {
+	res.cookie("auth_token", "", {
+		// cookie expires at the time of creation(it expires as soo as it is created)
+		expires: new Date(0),
+	});
+});
+
 export default router;
