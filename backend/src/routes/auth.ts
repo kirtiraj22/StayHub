@@ -75,6 +75,8 @@ router.post("/logout", (req: Request, res: Response) => {
 		// cookie expires at the time of creation(it expires as soo as it is created)
 		expires: new Date(0),
 	});
+
+	res.send();
 });
 
 export default router;
