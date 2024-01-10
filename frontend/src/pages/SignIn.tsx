@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import * as apiClient from "../api-client";
 import { useMutation, useQueryClient } from "react-query";
 import { useAppContext } from "../contexts/AppContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export type SignInFormData = {
 	email: string;
@@ -81,13 +81,19 @@ const SignIn = () => {
 					</span>
 				)}
 			</label>
-			<span className="mx-auto">
+			<span className="flex mx-auto">
 				<button
 					type="submit"
 					className="bg-blue-600 text-white py-2 font-bold hover:bg-blue-500 text-xl px-6 border rounded-lg"
 				>
 					Login
 				</button>
+			</span>
+			<span className="text-sm mx-auto">
+				Not Registered?{" "}
+				<Link to="/register" className="font-semibold underline">
+					Create an account here.
+				</Link>
 			</span>
 		</form>
 	);
