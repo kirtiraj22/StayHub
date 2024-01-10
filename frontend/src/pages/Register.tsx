@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 
 // imports all the function as apiClient variable
 import * as apiClient from "../api-client";
@@ -15,6 +15,7 @@ export type RegisterFormData = {
 };
 
 const Register = () => {
+	const queryClient = useQueryClient();
 	const navigate = useNavigate();
 	const { showToast } = useAppContext();
 	const {
@@ -26,8 +27,9 @@ const Register = () => {
 
 	// whenever we want to use POST, PUT or DELETE request, we can use useMutation() hook from react-query
 	const mutation = useMutation(apiClient.register, {
-		onSuccess: () => {
+		onSuccess: async () => {
 			showToast({ message: "Registration Success!", type: "SUCCESS" });
+			await queryClient.invalidateQueries("validateToken");
 			navigate("/");
 		},
 		onError: (error: Error) => {
