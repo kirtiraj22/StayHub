@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useAppContext } from "../contexts/AppContext";
 const Header = () => {
 	const { isLoggedIn } = useAppContext();
+
 	return (
 		<div className="bg-blue-800 p-6">
 			<div className="container mx-auto flex justify-between">
