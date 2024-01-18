@@ -6,6 +6,15 @@ import authRoutes from "./routes/auth";
 import userRoutes from "./routes/users";
 import cookieParser from "cookie-parser";
 import path from "path";
+// using v2 SDK of cloudinary
+import { v2 as cloudinary } from "cloudinary";
+
+// setup connection to cloudinary from backend
+cloudinary.config({
+	cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+	api_key: process.env.CLOUDINARY_API_KEY,
+	api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 mongoose.connect(process.env.MONGODB_CONNECTION_STRING as string);
 
