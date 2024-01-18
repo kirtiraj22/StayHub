@@ -8,6 +8,7 @@ import cookieParser from "cookie-parser";
 import path from "path";
 // using v2 SDK of cloudinary
 import { v2 as cloudinary } from "cloudinary";
+import myHotelRoutes from "./routes/my-hotels";
 
 // setup connection to cloudinary from backend
 cloudinary.config({
@@ -34,7 +35,7 @@ app.use(express.static(path.join(__dirname, "../../frontend/dist")));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
-
+app.use("/api/my-hotels", myHotelRoutes);
 app.listen(3000, () => {
 	console.log("App running on localhost: 3000");
 });
