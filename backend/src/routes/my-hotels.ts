@@ -76,7 +76,7 @@ router.post(
 	}
 );
 
-router.get("/my-hotels", verifyToken, async (req: Request, res: Response) => {
+router.get("/", verifyToken, async (req: Request, res: Response) => {
 	try {
 		const hotels = await Hotel.find({ userId: req.userId });
 		res.json(hotels);
