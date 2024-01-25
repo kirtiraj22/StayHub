@@ -45,16 +45,7 @@ router.post(
 			const newHotel: HotelType = req.body;
 
 			// 1.upload images to cloudinary
-			const uploadPromises = imageFiles.map(async (image) => {
-				// convert image to base 64 string(so it can be processed by cloudinary)
-				const b64 = Buffer.from(image.buffer).toString("base64");
-				let dataURI = "data:" + image.mimetype + ";base64," + b64;
-				const res = await cloudinary.v2.uploader.upload(dataURI);
-				return res.url;
-			});
-
-			// wait for all images to get uploaded
-			const imageUrls = await Promise.all(uploadPromises);
+			const imageUrls = await uploadImages(imageFiles);
 
 			// 2.if upload successful, add URLs to new hotel
 			newHotel.imageUrls = imageUrls;
@@ -103,5 +94,65 @@ router.get("/:id", verifyToken, async (req: Request, res: Response) => {
 		});
 	}
 });
+
+router.put(
+	"/:hotelId",
+	verifyToken,
+	upload.array("imageFiles"),
+	async (req: Request, res: Response) => {
+		try {
+			const updatedHotel: HotelType = req.body;
+			updatedHotel.lastUpdated = new Date();
+
+			const hotel = await Hotel.findOneAndUpdate(
+				{
+					_id: req.params.hotelId,
+					userId: req.userId,
+				},
+				updatedHotel,
+				{
+					// method returns the updated document and not the original ones
+					new: true,
+				}
+			);
+
+			if (!hotel) {
+				return res.status(404).json({
+					message: "Hotel not found!",
+				});
+			}
+			// new files(that user decided to add)
+			const files = req.files as Express.Multer.File[];
+			// upload new images to cloudinary and get urls as array of string
+			const updatedImageUrls = await uploadImages(files);
+
+			hotel.imageUrls = [
+				...updatedImageUrls,
+				...(updatedHotel.imageUrls || []),
+			];
+
+			await hotel.save();
+			res.status(201).json(hotel);
+		} catch (err) {
+			res.status(500).json({
+				message: "Something went wrong!",
+			});
+		}
+	}
+);
+
+async function uploadImages(imageFiles: Express.Multer.File[]) {
+	const uploadPromises = imageFiles.map(async (image) => {
+		// convert image to base 64 string(so it can be processed by cloudinary)
+		const b64 = Buffer.from(image.buffer).toString("base64");
+		let dataURI = "data:" + image.mimetype + ";base64," + b64;
+		const res = await cloudinary.v2.uploader.upload(dataURI);
+		return res.url;
+	});
+
+	// wait for all images to get uploaded
+	const imageUrls = await Promise.all(uploadPromises);
+	return imageUrls;
+}
 
 export default router;
