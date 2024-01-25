@@ -23,7 +23,7 @@ export type HotelFormData = {
 };
 
 type Props = {
-	hotel: HotelType;
+	hotel?: HotelType;
 	onSave: (hotelFormData: FormData) => void;
 	isLoading: boolean;
 };
@@ -32,7 +32,7 @@ const ManageHotelForm = ({ onSave, isLoading, hotel }: Props) => {
 	const formMethods = useForm<HotelFormData>();
 	const { handleSubmit, reset } = formMethods;
 
-	// if the component receives some new hotel data, the useEffect will run
+	// useEffect to reset the form when new hotel data is received
 	useEffect(() => {
 		reset(hotel);
 	}, [hotel, reset]);
@@ -40,6 +40,11 @@ const ManageHotelForm = ({ onSave, isLoading, hotel }: Props) => {
 	const onSubmit = handleSubmit((formDataJson: HotelFormData) => {
 		// create new formData object & call API
 		const formData = new FormData();
+
+		if (hotel) {
+			formData.append("hotelId", hotel._id);
+		}
+
 		formData.append("name", formDataJson.name);
 		formData.append("city", formDataJson.city);
 		formData.append("country", formDataJson.country);
@@ -53,6 +58,13 @@ const ManageHotelForm = ({ onSave, isLoading, hotel }: Props) => {
 		formDataJson.facilities.forEach((facility, index) => {
 			formData.append(`facilities[${index}]`, facility);
 		});
+
+		//
+		if (formDataJson.imageUrls) {
+			formDataJson.imageUrls.forEach((url, index) => {
+				formData.append(`imageUrls[${index}]`, url);
+			});
+		}
 
 		// will convert imageFiles(type: FileList) to array
 		Array.from(formDataJson.imageFiles).forEach((imageFile) => {
