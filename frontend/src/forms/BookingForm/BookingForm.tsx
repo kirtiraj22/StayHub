@@ -78,10 +78,6 @@ const BookingForm = ({ currentUser, paymentIntent }: Props) => {
 				},
 			}
 		);
-		console.log("result", result);
-
-		console.log("result payment intent", result.paymentIntent);
-		console.log("result status", result.paymentIntent?.status);
 		if (result.paymentIntent?.status === "succeeded") {
 			//book room
 			bookRoom({
