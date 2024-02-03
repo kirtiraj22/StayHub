@@ -68,6 +68,7 @@ const Booking = () => {
 			{currentUser && paymentIntentData && (
 				// elements comes from stripe SDK and allows us to use some stripe UI elements(that lets user to enter card details,etc)
 				<Elements
+					key={paymentIntentData.clientSecret}
 					stripe={stripePromise}
 					options={{
 						clientSecret: paymentIntentData.clientSecret,
