@@ -35,4 +35,14 @@ StayHub is a modern room booking platform developed using the MERN stack with Ty
 4. Start the frontend development server: `npm run dev`
 
 ## Additional Details
+- **Home Page**: Displays hotels with a special focus on the two most recently added hotels, presented with enhanced styling.
 
+- **Search Bar**: Featured on the home page, the search bar enables users to enter the Country or City, select the number of adults and children, and input check-in and check-out dates.
+
+- **Protected Pages**: "My Hotels" and "My Bookings" pages are protected, only accessible when the user is signed in.
+
+- **Hotel Details**: Clicking on a particular hotel navigates the user to a detailed view with additional information. The "Book Now" option directs users to the confirm booking page with a booking summary.
+
+- **Add Hotel Feature**: Users can add their hotels through the "Add Hotel" option on the "My Hotels" page. The form requires valid information and allows users to upload up to 6 images. Added hotels are displayed on the homepage for other users to book.
+
+- **State Management**: Utilizes Context API for efficient state management and React Hook Form for handling various forms.
